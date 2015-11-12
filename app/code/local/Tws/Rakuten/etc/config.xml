@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Tws_Rakuten>
+            <version>0.1.0</version>
+        </Tws_Rakuten>
+    </modules>
+ <global>
+    <blocks>
+        <rakutenpayment>
+            <class>Tws_Rakuten_Block</class>
+        </rakutenpayment> 
+     </blocks>     
+   <sales>
+    <order>
+      <statuses>
+        <waz translate="label">
+            <label>nicht Ausbezahlt</label>
+        </waz>
+        
+        <swt translate="label"><label>Versand ohne Trackingnumber</label></swt>
+        <packaging translate="label"><label>Verpackung</label></packaging>
+        <shippingpreparation translate="label"><label>Versandvorbereitung</label></shippingpreparation>
+      </statuses>
+      <states>
+        <processing translate="label">
+                        <label>Processing</label>
+                        <statuses>
+                            <processing default="1"/>
+                            <packaging />
+                            <shippingpreparation />
+                        </statuses>
+                        <visible_on_front>1</visible_on_front>
+                    </processing>
+                    <complete translate="label">
+                        <label>Complete</label>
+                        <statuses>
+                            <complete default="1"/>
+                             <waz />
+                             <swt />
+                        </statuses>
+                        <visible_on_front>1</visible_on_front>
+                    </complete>
+       
+      </states>
+    </order>
+ </sales>
+    <helpers>
+      <rakuten>
+        <class>Tws_Rakuten_Helper</class>
+      </rakuten>
+    </helpers>
+    <models>
+      <rakuten>
+        <class>Tws_Rakuten_Model</class>
+        <resourceModel>rakuten_mysql4</resourceModel>
+      </rakuten>
+        <rakuten_mysql4>
+        <entities>
+         <Rakuten_Order>
+                        <table>rakutenindex</table>
+         </Rakuten_Order>
+         </entities>
+        </rakuten_mysql4>
+    </models>
+    <resources>
+      <rakuten_setup>
+        <setup>
+          <module>Tws_Rakuten</module>
+        </setup>
+        <connection>
+          <use>core_setup</use>
+        </connection>
+      </rakuten_setup>
+      <rakuten_write>
+        <connection>
+          <use>core_write</use>
+        </connection>
+      </rakuten_write>
+      <rakuten_read>
+        <connection>
+          <use>core_read</use>
+        </connection>
+      </rakuten_read>
+      <categoryattribute_setup>
+        <setup>
+          <module>Tws_Rakuten</module>
+          <class>Mage_Catalog_Model_Resource_Eav_Mysql4_Setup</class>
+        </setup>
+        <connection>
+          <use>core_setup</use>
+        </connection>
+      </categoryattribute_setup>
+      <categoryattribute_write>
+        <connection>
+          <use>core_write</use>
+        </connection>
+      </categoryattribute_write>
+      <categoryattribute_read>
+        <connection>
+          <use>core_read</use>
+        </connection>
+      </categoryattribute_read>
+    </resources>
+    <events>
+      <catalog_product_attribute_update_after> 
+        <observers>
+          <tws_catalog_product_attribute_update_after_handler>
+            <type>model</type> 
+            <class>rakuten/observer</class> 
+            <method>atributaftersave</method> 
+            <args></args>  
+          </tws_catalog_product_attribute_update_after_handler>
+        </observers>
+      </catalog_product_attribute_update_after>
+      <catalog_product_save_after>
+        <observers>
+          <tws_catalog_product_save_after_handler>
+            <type>model</type> 
+            <class>rakuten/observer</class>
+            <method>productaftersave</method>
+            <args></args>
+          </tws_catalog_product_save_after_handler>
+        </observers>
+      </catalog_product_save_after>
+        <sales_order_save_after>
+                <observers>
+                    <rakuten_cancel_order>
+                        <type>singleton</type>
+                        <class>Tws_Rakuten_Model_Observer</class>
+                        <method>salesOrderSaveAfter</method>
+                    </rakuten_cancel_order>
+                </observers>
+            </sales_order_save_after>
+              <sales_order_shipment_track_save_after>
+                <observers>
+                    <rakuten_save_track_order_shipment>
+                        <type>model</type>
+                        <class>Tws_Rakuten_Model_Observer</class>
+                        <method>salesOrderShipmentTrackSaveAfter</method>
+                    </rakuten_save_track_order_shipment>
+                </observers>
+            </sales_order_shipment_track_save_after>
+            <sales_order_shipment_save_after>
+                <observers>
+                    <rakuten_save_sales_order_shipment>
+                        <type>model</type>
+                        <class>Tws_Rakuten_Model_Observer</class>
+                        <method>salesOrderShipmentSaveAfter</method>
+                    </rakuten_save_sales_order_shipment>
+                </observers>
+            </sales_order_shipment_save_after>
+            <cataloginventory_stock_item_save_after>
+                <observers>
+                    <rakuten_observer_stock_item>
+                        <type>model</type>
+                        <class>Tws_Rakuten_Model_Observer</class>
+                        <method>StockItemSaveAfter</method>
+                    </rakuten_observer_stock_item>
+                </observers>
+            </cataloginventory_stock_item_save_after> 
+    </events>
+  </global>
+    <default>
+        <rakuten>
+            <endpoint>
+                <url>http://webservice.rakuten.de/merchants</url>
+            </endpoint>
+        </rakuten>
+        <payment>
+            <rakutenpayment>
+                <active>0</active>
+                <model>rakuten/payment_rakutenpayment</model>
+                <order_status>pending</order_status>
+                <title>Rakuten Payment</title>
+                <allowspecific>0</allowspecific>
+                  <group>offline</group>
+            </rakutenpayment>
+        </payment>
+        <carriers>
+            <rakutenshipping>
+                <active>1</active>
+                 <allowed_methods>rakutenshipping</allowed_methods>
+                <methods>rakutenshipping</methods>
+                <model>rakuten/carrier_rakutenshipping</model>
+                <name>DHL</name>
+                <title>Versand mit</title>
+                <description>Rakuten Versandkosten</description>
+                <handling_type>F</handling_type>
+                <sort_order>0</sort_order>
+            </rakutenshipping>
+        </carriers>
+   
+   </default>    
+    <crontab>
+        <jobs>            
+            <tws_rakuten_order_import>
+                <schedule><cron_expr>*/30 * * * *</cron_expr></schedule>
+                <run><model>rakuten/cron::Order_update</model></run>
+            </tws_rakuten_order_import>
+             <tws_rakuten_product_update>
+                <schedule><cron_expr>* */2 * * *</cron_expr></schedule>
+                <run><model>rakuten/cron::Product_update</model></run>
+            </tws_rakuten_product_update>
+        </jobs>
+    </crontab>
+</config> 

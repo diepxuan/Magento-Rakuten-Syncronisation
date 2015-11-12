@@ -1,0 +1,5 @@
+<?php echo Mage::helper('rakuten')->__('Purchase Order Number: %s', $this->escapeHtml($this->getInfo()->getPoNumber())) ?>
+    {{pdf_row_separator}}
+<?php echo Mage::helper('rakuten')->__('Zahlung per: %s', $this->escapeHtml($this->getInfo()->getAdditionalData())) ?>
+    {{pdf_row_separator}}
+

@@ -1,0 +1,3 @@
+<p><?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?></p>
+<p><?php echo Mage::helper('payment')->__('Purchase Order Number: %s', $this->escapeHtml($this->getInfo()->getPoNumber())) ?></p>
+<p><?php echo Mage::helper('payment')->__('Zahlung per: %s', $this->escapeHtml($this->getInfo()->getAdditionalData())) ?></p>
