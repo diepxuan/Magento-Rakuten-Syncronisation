@@ -144,12 +144,13 @@ class Tws_Rakuten_Model_Observer
          return $this;
     }
     protected function bestellungexist1($rakutenid){
+		$resource = Mage::getSingleton('core/resource');
          $read = Mage::getSingleton('core/resource')->getConnection('core_read'); 
   $sql = "SELECT
 rakutenindex.bestellnummer,
 rakutenindex.shop
 FROM
-rakutenindex
+".$resource->getTableName('rakutenindex')."
 WHERE  ordernr='".$rakutenid."'";  
 
 $result = $read->fetchAll($sql);

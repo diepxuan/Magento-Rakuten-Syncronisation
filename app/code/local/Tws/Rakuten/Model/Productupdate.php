@@ -1,12 +1,12 @@
 <?php
 require_once 'app/Mage.php';
 Mage::app('default');
-
+$resource = Mage::getSingleton('core/resource');
 $read = Mage::getSingleton('core/resource')->getConnection('core_read'); 
 
 $write = Mage::getSingleton('core/resource')->getConnection('core_write'); 
-$table_prefix = Mage::getConfig()->getTablePrefix();
-$query = "SELECT rakutenindex FROM rakutenindex WHERE bestellnummer='xxxx'";
+
+$query = "SELECT rakutenindex FROM ".$resource->getTableName('rakutenindex')." WHERE bestellnummer='xxxx'";
 $result = $read->fetchAll($query);
 //$result = $read->query($query);
 

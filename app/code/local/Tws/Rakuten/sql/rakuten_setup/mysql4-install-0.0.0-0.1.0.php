@@ -2,8 +2,9 @@
 $installer = $this;
 $installer->startSetup();
 $resource = Mage::getSingleton('core/resource');
+
 $installer->run("
-CREATE TABLE IF NOT EXISTS rakutenindex(
+CREATE TABLE IF NOT EXISTS ".$resource->getTableName('rakutenindex')."(
   rakutenindex int(11) NOT NULL AUTO_INCREMENT,
   bestellnummer varchar(255) CHARACTER SET latin1 COLLATE latin1_german2_ci DEFAULT NULL,
   shop varchar(255) CHARACTER SET latin1 COLLATE latin1_german2_ci DEFAULT NULL,
@@ -11,7 +12,7 @@ CREATE TABLE IF NOT EXISTS rakutenindex(
   status1 varchar(255) CHARACTER SET latin1 COLLATE latin1_german2_ci DEFAULT NULL,
   PRIMARY KEY (rakutenindex)
 ) 
-		
+        
 ");
 
 

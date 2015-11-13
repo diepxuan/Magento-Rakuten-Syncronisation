@@ -4,13 +4,13 @@ Mage::app('default');
 $allStores = Mage::app()->getStores();
 $start='2015-02-09 00:00:00';
 $stop='2015-12-01 23:59:59';
-
+$resource = Mage::getSingleton('core/resource');
 function bestellungexist($rakutenid,$shop){
   $read = Mage::getSingleton('core/resource')->getConnection('core_read'); 
   $sql = "SELECT
 rakutenindex
 FROM
-rakutenindex
+".$resource->getTableName('rakutenindex')."
 WHERE
 shop ='".$shop."' and bestellnummer='".$rakutenid."'";  
 $result = $read->fetchAll($sql);
@@ -25,7 +25,7 @@ function bestellungmage4($rakutenid,$shop){
   $sql = "SELECT
 ordernr
 FROM
-rakutenindex
+".$resource->getTableName('rakutenindex')."
 WHERE
 shop ='".$shop."' and bestellnummer='".$rakutenid."'";  
 $result = $read->fetchAll($sql); 
@@ -37,7 +37,7 @@ endif;
 }
 function bestellungins4($rakutenid,$shop,$orderId,$status){
   $write = Mage::getSingleton('core/resource')->getConnection('core_write'); 
- $insert="INSERT INTO rakutenindex (bestellnummer, shop, ordernr, status1) values ('".$rakutenid."', '".$shop."', '".$orderId."', '".$status."')";
+ $insert="INSERT INTO ".$resource->getTableName('rakutenindex')." (bestellnummer, shop, ordernr, status1) values ('".$rakutenid."', '".$shop."', '".$orderId."', '".$status."')";
  $write->query($insert); 
   return ;
 }
